@@ -8,7 +8,8 @@ jobs:
   AUTO_DEPLOY:
     runs-on: ubuntu-latest
 
-    steps:
+    steps:  
+      - uses: actions/checkout@v3
       - name: Run scripts in server
         uses: appleboy/ssh-action@master
         with:
@@ -16,4 +17,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
-          script: ${{ secrets.SCRIPT }}
+          script: |
+            cd /path/to/your/nestjs/app
+            npm install # or yarn install, depending on your preference
+            npm run build
