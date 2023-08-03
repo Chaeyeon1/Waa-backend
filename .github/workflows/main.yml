@@ -4,19 +4,37 @@ on:
   push:
     branches:
       - main
+
 jobs:
   AUTO_DEPLOY:
     runs-on: ubuntu-latest
 
-    steps:  
-      - name: Check Node v # Node v 확인
-        run: node -v
-      - uses: actions/checkout@v3
-      - name: Run scripts in server
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Replace with your desired Node.js version
+
+      - name: Install dependencies and build
+        run: |
+          cd /path/to/your/nestjs/app
+          npm install # or yarn install, depending on your preference
+          npm run build
+          # Add any other commands you need to start or restart your Nest.js app
+
+      - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
-          password: ${{ secrets.PASSWORD }}
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }} # Alternatively, you can use `private-key` instead of `password` if you have an SSH private key.
           port: ${{ secrets.PORT }}
-          script: ${{ secrets.SCRIPT }}
+          script: |
+            echo 'hi'
+            git pull main
+            npm run build
+            pm2 restart 
+
