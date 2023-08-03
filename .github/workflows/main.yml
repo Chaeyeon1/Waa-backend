@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:  
+      - name: Check Node v # Node v 확인
+        run: node -v
       - uses: actions/checkout@v3
       - name: Run scripts in server
         uses: appleboy/ssh-action@master
