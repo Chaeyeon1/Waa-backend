@@ -17,7 +17,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
-            npm run start:prod
           script: |
             pm2 kill
             ls
