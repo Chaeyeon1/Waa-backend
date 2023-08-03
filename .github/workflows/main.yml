@@ -4,31 +4,18 @@ on:
   push:
     branches:
       - main
-
 jobs:
   AUTO_DEPLOY:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14' # Replace with your desired Node.js version
-
-      - name: Deploy to server
+      - uses: actions/checkout@v2
+      - name: Run scripts in server
         uses: appleboy/ssh-action@master
         with:
+          password: ${{ secrets.PASSWORD }}
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }} # Alternatively, you can use `private-key` instead of `password` if you have an SSH private key.
           port: ${{ secrets.PORT }}
-          script: |
-            pm2 kill
-            ls
-            git pull main
-            npm run build
             npm run start:prod
 
