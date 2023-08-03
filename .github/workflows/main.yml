@@ -18,6 +18,12 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           script: |
+            sudo apt update
+            sudo apt install git
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+            nvm install node
+            npm install -g pm2
+
             cd Waa-backend
             ls
             pm2 kill
