@@ -18,13 +18,6 @@ jobs:
         with:
           node-version: '14' # Replace with your desired Node.js version
 
-      - name: Install dependencies and build
-        run: |
-          ls
-          npm install # or yarn install, depending on your preference
-          npm run build
-          # Add any other commands you need to start or restart your Nest.js app
-
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
@@ -33,8 +26,9 @@ jobs:
           password: ${{ secrets.PASSWORD }} # Alternatively, you can use `private-key` instead of `password` if you have an SSH private key.
           port: ${{ secrets.PORT }}
           script: |
+            pm2 kill
             ls
             git pull main
             npm run build
-            pm2 restart 
+            npm run start:prod
 
