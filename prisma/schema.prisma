@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+// 데이터베이스 연동
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 만들려는 모델
+model Todo {
+  id Int @default(autoincrement()) @id
+  title String
+  content String?
+  is_done Boolean? @default(false)
+}
+
+model User {
+  id Int @default(autoincrement()) @id
+  username String?
+  score Int?
+  age Int?
+  userId String @unique
+  password String?
+  accessToken String?
+  refreshToken String?
+  counselings Counseling[]
+  twentyQuestions TwentyQuestion[]  
+  wordChains  WordChain[]  
+}
+
+
+model Counseling {
+  id       Int     @id @default(autoincrement())
+  time     DateTime
+  sender   String
+  content     String
+  user_id  Int?
+  user     User?   @relation(fields: [user_id], references: [id])
+}
+
+model TwentyQuestion {
+  id       Int     @id @default(autoincrement())
+  time     DateTime
+  sender   String
+  content  String
+  user_id  Int?
+  user     User?   @relation(fields: [user_id], references: [id])
+}
+
+model WordChain {
+  id       Int     @id @default(autoincrement())
+  sender   String
+  time     DateTime
+  content  String
+  user_id  Int?
+  user     User?   @relation(fields: [user_id], references: [id])
+}
