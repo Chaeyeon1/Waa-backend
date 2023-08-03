@@ -17,7 +17,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
-          script: |
-            cd /path/to/your/nestjs/app
-            npm install # or yarn install, depending on your preference
-            npm run build
+          script: ${{ secrets.SCRIPT }}
