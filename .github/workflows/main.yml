@@ -19,7 +19,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             pm2 kill
-            ls
+            cd Waa-backend
             git pull main
             npm run build
             npm run start
