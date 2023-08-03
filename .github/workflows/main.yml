@@ -11,20 +11,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Install git, curl, and Node.js
-        run: |
-          sudo apt update
-          sudo apt install git
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-          nvm install node
-
-      - name: Install PM2
-        run: |
-          npm install -g pm2
-
       - name: Run scripts in server
         uses: appleboy/ssh-action@master
         with:
@@ -33,6 +19,13 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           script: |
+            sudo apt update
+            sudo apt install git
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+            nvm install node
+            npm install -g pm2
             cd Waa-backend
             ls
             pm2 kill
