@@ -20,6 +20,7 @@ jobs:
 
       - name: Install dependencies and build
         run: |
+          ls
           npm install # or yarn install, depending on your preference
           npm run build
           # Add any other commands you need to start or restart your Nest.js app
@@ -32,7 +33,7 @@ jobs:
           password: ${{ secrets.PASSWORD }} # Alternatively, you can use `private-key` instead of `password` if you have an SSH private key.
           port: ${{ secrets.PORT }}
           script: |
-            echo 'hi'
+            ls
             git pull main
             npm run build
             pm2 restart 
