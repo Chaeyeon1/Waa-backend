@@ -3,7 +3,7 @@ name: deploy
 on:
   push:
     branches:
-      - [배포할 branch]
+      - main
 jobs:
   AUTO_DEPLOY:
     runs-on: ubuntu-latest
