@@ -20,7 +20,6 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          cd /path/to/your/nestjs/app
           npm install # or yarn install, depending on your preference
           npm run build
           # Add any other commands you need to start or restart your Nest.js app
