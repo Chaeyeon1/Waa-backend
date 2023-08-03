@@ -20,3 +20,7 @@ jobs:
           script: |
             cd Waa-backend
             ls
+            pm2 kill
+            git pull main
+            npm run build
+            npm run start
