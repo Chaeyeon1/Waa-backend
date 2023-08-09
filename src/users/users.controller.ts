@@ -6,11 +6,15 @@ import {
   Delete,
   Put,
   Param,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { CreateUserDto, ModifyPasswordDto } from './dto/user.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -44,5 +48,12 @@ export class UsersController {
     @Body() data: User,
   ): Promise<User | null> {
     return this.userService.updateUser(id, data.password);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/')
+  async getProfile(@Req() req: any) {
+    const user = req.user;
+    return user;
   }
 }

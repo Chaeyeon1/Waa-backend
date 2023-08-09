@@ -7,18 +7,20 @@ import {
   // UseGuards,
   UnauthorizedException,
 } from '@nestjs/common';
-
-// import { JwtService } from '@nestjs/jwt/dist';
 import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '../users/users.service';
 import { User } from '@prisma/client';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { LoginDto } from './dto/auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('signin')
 export class AuthController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: '로그인' })
@@ -36,6 +38,9 @@ export class AuthController {
       throw new UnauthorizedException('이메일 또는 비밀번호를 확인해 주세요.');
     }
 
-    return '로그인 완료';
+    const payload = { userId: user.userId };
+    const accessToken = this.jwtService.sign(payload);
+
+    return accessToken;
   }
 }
