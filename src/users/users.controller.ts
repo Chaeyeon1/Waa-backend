@@ -10,7 +10,7 @@ import {
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
-import { CreateUserDto, ModifyPasswordDto } from './dto/create-user.dto';
+import { CreateUserDto, ModifyPasswordDto } from './dto/user.dto';
 
 @Controller('users')
 export class UsersController {
