@@ -33,6 +33,7 @@ jobs:
             npm install bcrypt
             npm install @nestjs/passport
             npm install @passport-jwt
+            npm install
             ls
             pm2 kill
             git pull origin main
