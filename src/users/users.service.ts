@@ -7,17 +7,18 @@ export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
   // 추가
-  async addTodoItem(data: User): Promise<User> {
-    if (!data || !data.userId) {
-      throw new BadRequestException('userId is required to add a todo item.');
+  async createUser(data: User): Promise<User> {
+    if (!data || !data.userId || !data.username || !data.password) {
+      throw new BadRequestException('필요한 정보를 모두 적어주세요.');
     }
 
     return this.prismaService.user.create({
       data: {
         userId: data.userId,
-        password: data.password || null,
-        username: data.username || null,
-        score: data.score || null,
+        password: data.password,
+        username: data.username,
+        score: data.score || 0,
+        // 나이는 추후 설정 가능하도록
         age: data.age || null,
         accessToken: data.accessToken || null,
         refreshToken: data.refreshToken || null,
@@ -26,22 +27,22 @@ export class UsersService {
   }
 
   // 전체 조회
-  async fetchAllTodos(): Promise<User[]> {
+  async searchUsers(): Promise<User[]> {
     return this.prismaService.user.findMany();
   }
 
   // 단일 조회
-  async fetchTodoItem(id: number): Promise<User | null> {
+  async searchUser(id: number): Promise<User | null> {
     return this.prismaService.user.findUnique({ where: { id: Number(id) } });
   }
 
   // 삭제
-  async deleteTodoItem(id: number): Promise<User | null> {
+  async deleteUser(id: number): Promise<User | null> {
     return this.prismaService.user.delete({ where: { id: Number(id) } });
   }
 
   // 비밀번호 수정
-  async updateTodoItem(id: number, password: string): Promise<User | null> {
+  async updateUser(id: number, password: string): Promise<User | null> {
     return this.prismaService.user.update({
       where: { id: Number(id) },
       data: {

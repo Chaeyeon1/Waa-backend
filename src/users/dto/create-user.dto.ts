@@ -9,9 +9,6 @@ export class CreateUserDto {
 
   @ApiProperty({ description: '비밀번호', default: 'asdf', required: true })
   password: string;
-
-  @ApiProperty({ description: '점수', default: 0, required: true })
-  score: number;
 }
 
 export class ModifyPasswordDto {
