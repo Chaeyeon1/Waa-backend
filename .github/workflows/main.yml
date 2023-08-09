@@ -18,8 +18,10 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
+          env: ${{ secrets.ENV }}
           script: |
-            ls
+            touch .env
+            echo $env | base64 --decode >> .env
             export DATABASE_URL=${{ secrets.DATABASE_URL }}
             sudo apt update
             sudo apt install git
