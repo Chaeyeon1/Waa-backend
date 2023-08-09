@@ -19,25 +19,25 @@ export class UsersController {
   @Post()
   @ApiOperation({ summary: 'Create a user' })
   @ApiBody({ type: CreateUserDto })
-  async addTodoItem(@Body() data: User): Promise<User> {
+  async createUser(@Body() data: User): Promise<User> {
     return this.userService.addTodoItem(data);
   }
 
   // 단일 조회
   @Get(':id')
-  async fetchTodoItem(@Param('id') id: number): Promise<User | null> {
+  async searchUser(@Param('id') id: number): Promise<User | null> {
     return this.userService.fetchTodoItem(id);
   }
 
   @Delete(':id')
-  async deleteTodoItem(@Param('id') id: number): Promise<User | null> {
+  async deleteUser(@Param('id') id: number): Promise<User | null> {
     return this.userService.deleteTodoItem(id);
   }
 
   @Put(':id')
   @ApiOperation({ summary: '비밀번호 수정' })
   @ApiBody({ type: CreateUserDto })
-  async updateTodoItem(
+  async updateUser(
     @Param('id') id: number,
     @Body() data: User,
   ): Promise<User | null> {
