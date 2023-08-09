@@ -20,8 +20,6 @@ jobs:
           port: ${{ secrets.PORT }}
           env: ${{ secrets.ENV }}
           script: |
-            touch .env
-            echo $env | base64 --decode >> .env
             export DATABASE_URL=${{ secrets.DATABASE_URL }}
             export SECRET_KEY=${{ secrets.SECRET_KEY }}
             sudo apt update
