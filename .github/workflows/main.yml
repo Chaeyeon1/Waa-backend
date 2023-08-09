@@ -23,6 +23,7 @@ jobs:
             touch .env
             echo $env | base64 --decode >> .env
             export DATABASE_URL=${{ secrets.DATABASE_URL }}
+            export SECRET_KEY=${{ secrets.SECRET_KEY }}
             sudo apt update
             sudo apt install git
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
@@ -31,6 +32,9 @@ jobs:
             nvm install node
             npm install -g pm2
             cd Waa-backend
+            npm install bcrypt
+            npm install @nestjs/passport
+            npm install @passport-jwt
             ls
             pm2 kill
             git pull origin main
