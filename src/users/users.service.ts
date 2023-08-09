@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { User } from '@prisma/client';
 
@@ -6,10 +10,19 @@ import { User } from '@prisma/client';
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  // 추가
   async createUser(data: User): Promise<User> {
     if (!data || !data.userId || !data.username || !data.password) {
       throw new BadRequestException('필요한 정보를 모두 적어주세요.');
+    }
+
+    const hasUserId = await this.prismaService.user.findFirst({
+      where: {
+        userId: data.userId,
+      },
+    });
+
+    if (hasUserId) {
+      throw new ConflictException('이미 사용중인 아이디 입니다.');
     }
 
     return this.prismaService.user.create({
