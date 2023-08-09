@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -25,16 +26,26 @@ export class UsersService {
       throw new ConflictException('이미 사용중인 아이디 입니다.');
     }
 
+    const hashedPassword = bcrypt.hashSync(data.password, 10);
+
     return this.prismaService.user.create({
       data: {
         userId: data.userId,
-        password: data.password,
+        password: hashedPassword,
         username: data.username,
         score: data.score || 0,
         // 나이는 추후 설정 가능하도록
         age: data.age || null,
         accessToken: data.accessToken || null,
         refreshToken: data.refreshToken || null,
+      },
+    });
+  }
+
+  async findById(userId: string) {
+    return await this.prismaService.user.findUnique({
+      where: {
+        userId,
       },
     });
   }

@@ -1,23 +1,41 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { ApiBody } from '@nestjs/swagger';
-import { CreateUserDto } from './dto/auth.dto';
+import {
+  Controller,
+  Post,
+  Body,
+  // Get,
+  // Req,
+  // UseGuards,
+  UnauthorizedException,
+} from '@nestjs/common';
 
-@Controller('auth')
+// import { JwtService } from '@nestjs/jwt/dist';
+import * as bcrypt from 'bcrypt';
+
+import { UsersService } from '../users/users.service';
+import { User } from '@prisma/client';
+import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { LoginDto } from './dto/auth.dto';
+
+@Controller('signin')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly userService: UsersService) {}
 
-  @Post('/signup')
-  @ApiBody({ type: CreateUserDto })
-  async signup(@Body() signupData: { userId: string; password: string }) {
-    const { userId, password } = signupData;
+  @Post()
+  @ApiOperation({ summary: '로그인' })
+  @ApiBody({ type: LoginDto })
+  async signin(@Body() data: User) {
+    const { userId, password } = data;
 
-    const result = await this.authService.signup(userId, password);
-
-    if ('error' in result) {
-      return { error: result.error };
+    const user = await this.userService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('아이디 또는 비밀번호를 확인해 주세요.');
     }
 
-    return result;
+    const isSamePassword = bcrypt.compareSync(password, user.password);
+    if (!isSamePassword) {
+      throw new UnauthorizedException('이메일 또는 비밀번호를 확인해 주세요.');
+    }
+
+    return '로그인 완료';
   }
 }
