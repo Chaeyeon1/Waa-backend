@@ -16,6 +16,15 @@ async function bootstrap() {
     .setTitle('Chaeyeon API')
     .setDescription('The cats API description')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'JWT',
+        in: 'header',
+      },
+      'access_token',
+    )
     // .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
