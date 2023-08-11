@@ -7,7 +7,7 @@ export class WordChainService {
   constructor(private prismaService: PrismaService) {}
 
   // 추가
-  async addChatting(data: WordChain): Promise<WordChain> {
+  async addChatting(data: WordChain, user): Promise<WordChain> {
     if (!data) {
       throw new BadRequestException('no Data');
     }
@@ -17,6 +17,7 @@ export class WordChainService {
         sender: data.sender,
         content: data.content,
         time: data.time,
+        user_id: user.id,
       },
     });
   }

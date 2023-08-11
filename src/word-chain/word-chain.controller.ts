@@ -1,8 +1,9 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { Controller, Post, Body, Req, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { CreateChatDto } from 'src/twenty-question/dto/create-chat.dto';
 import { WordChainService } from './word-chain.service';
 import { WordChain } from '@prisma/client';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('word-chain')
 export class WordChainController {
@@ -11,7 +12,14 @@ export class WordChainController {
   @Post()
   @ApiOperation({ summary: 'Create a user' })
   @ApiBody({ type: CreateChatDto })
-  async addChatting(@Body() data: WordChain): Promise<WordChain> {
-    return this.wordChainService.addChatting(data);
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async addChatting(
+    @Body() data: WordChain,
+    @Req() request,
+  ): Promise<WordChain> {
+    const user = request.user; // 현재 로그인된 사용자 정보
+
+    return this.wordChainService.addChatting(data, user);
   }
 }

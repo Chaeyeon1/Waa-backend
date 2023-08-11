@@ -7,7 +7,7 @@ export class TwentyQuestionService {
   constructor(private prismaService: PrismaService) {}
 
   // 추가
-  async addChatting(data: TwentyQuestion): Promise<TwentyQuestion> {
+  async addChatting(data: TwentyQuestion, user): Promise<TwentyQuestion> {
     if (!data) {
       throw new BadRequestException('no Data');
     }
@@ -17,6 +17,7 @@ export class TwentyQuestionService {
         sender: data.sender,
         content: data.content,
         time: data.time,
+        user_id: user.id,
       },
     });
   }
