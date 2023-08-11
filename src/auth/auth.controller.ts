@@ -35,6 +35,8 @@ export class AuthController {
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });
 
+    this.userService.updateRefreshToken(user.id, refreshToken);
+
     return { accessToken, refreshToken };
   }
 
