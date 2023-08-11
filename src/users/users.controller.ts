@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
-import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { CreateUserDto, ModifyPasswordDto } from './dto/user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
@@ -50,8 +50,9 @@ export class UsersController {
     return this.userService.updateUser(id, data.password);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('/')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
   async getProfile(@Req() req: any) {
     const user = req.user;
     return user;

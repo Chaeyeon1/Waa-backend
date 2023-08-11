@@ -23,7 +23,7 @@ async function bootstrap() {
         name: 'JWT',
         in: 'header',
       },
-      'access_token',
+      'access-token',
     )
     // .addTag('cats')
     .build();
