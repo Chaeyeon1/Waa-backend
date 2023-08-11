@@ -7,19 +7,6 @@ import { TwentyQuestionModule } from './twenty-question/twenty-question.module';
 import { WordChainModule } from './word-chain/word-chain.module';
 import { AuthModule } from './auth/auth.module';
 
-// @Module({
-//   imports: [
-//     UsersModule,
-// CounselingModule,
-// TwentyQuestionModule,
-// WordChainModule,
-//     // AuthModule,
-//   ],
-//   controllers: [AppController],
-//   providers: [AppService],
-// })
-// export class AppModule {}
-
 @Module({
   imports: [
     UsersModule,

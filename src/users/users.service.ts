@@ -74,4 +74,27 @@ export class UsersService {
       },
     });
   }
+
+  async getUserIfRefreshTokenMatches(
+    refreshToken: string,
+    userId: string,
+  ): Promise<User> {
+    const user: User = await this.findById(userId);
+
+    // user에 currentRefreshToken이 없다면 null을 반환 (즉, 토큰 값이 null일 경우)
+    if (!user.refreshToken) {
+      return null;
+    }
+
+    // 유저 테이블 내에 정의된 암호화된 refresh_token값과 요청 시 body에 담아준 refresh_token값 비교
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.refreshToken,
+    );
+
+    // 만약 isRefreshTokenMatching이 true라면 user 객체를 반환
+    if (isRefreshTokenMatching) {
+      return user;
+    }
+  }
 }
