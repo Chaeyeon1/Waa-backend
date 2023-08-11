@@ -14,7 +14,6 @@ import { User } from '@prisma/client';
 import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { CreateUserDto, ModifyPasswordDto } from './dto/user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {

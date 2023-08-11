@@ -6,6 +6,7 @@ import { User } from '@prisma/client';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { LoginDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('signin')
 export class AuthController {
@@ -32,7 +33,33 @@ export class AuthController {
 
     const payload = { userId: user.userId };
     const accessToken = this.jwtService.sign(payload);
+    const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });
 
-    return accessToken;
+    return { accessToken, refreshToken };
+  }
+
+  @Post('refresh')
+  @ApiOperation({ summary: '액세스 토큰 재발급' })
+  async refresh(@Body() data: RefreshTokenDto) {
+    const { refreshToken } = data;
+
+    try {
+      const decoded = this.jwtService.verify(refreshToken);
+
+      // 받은 리프레시 토큰이랑 디비에 저장되어있는 리프레시 토큰이 같은지 확인
+      const user = this.userService.getUserIfRefreshTokenMatches(
+        refreshToken,
+        decoded.userId,
+      );
+
+      if (user) {
+        const payload = { userId: (await user).userId };
+        const accessToken = this.jwtService.sign(payload);
+
+        return { accessToken };
+      }
+    } catch (error) {
+      throw new UnauthorizedException('리프레시 토큰이 유효하지 않습니다.');
+    }
   }
 }
