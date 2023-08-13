@@ -21,4 +21,15 @@ export class WordChainService {
       },
     });
   }
+
+  // 조회
+  async getUserWordChains(user): Promise<WordChain[]> {
+    const userWordChains = await this.prismaService.wordChain.findMany({
+      where: {
+        user_id: user.id,
+      },
+    });
+
+    return userWordChains;
+  }
 }
