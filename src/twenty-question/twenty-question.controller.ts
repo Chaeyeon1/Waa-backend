@@ -1,6 +1,6 @@
 import { TwentyQuestionService } from './twenty-question.service';
 import { TwentyQuestion } from '@prisma/client';
-import { Controller, Post, Body, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Req, UseGuards, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,5 +21,15 @@ export class TwentyQuestionController {
     const user = request.user; // 현재 로그인된 사용자 정보
 
     return this.twentyQuestionService.addChatting(data, user);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Create a user' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async searchChatting(@Req() request): Promise<TwentyQuestion[]> {
+    const user = request.user; // 현재 로그인된 사용자 정보
+
+    return this.twentyQuestionService.getUserTwentyQuestions(user);
   }
 }

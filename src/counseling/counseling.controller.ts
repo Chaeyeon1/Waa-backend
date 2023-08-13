@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { CreateChatDto } from 'src/twenty-question/dto/create-chat.dto';
 import { CounselingService } from './counseling.service';
@@ -21,5 +21,15 @@ export class CounselingController {
     const user = request.user; // 현재 로그인된 사용자 정보
 
     return this.counselingService.addChatting(data, user);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Create a user' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async searchChatting(@Req() request): Promise<Counseling[]> {
+    const user = request.user; // 현재 로그인된 사용자 정보
+
+    return this.counselingService.getUserCounselings(user);
   }
 }

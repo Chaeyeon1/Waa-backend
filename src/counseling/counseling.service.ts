@@ -21,4 +21,15 @@ export class CounselingService {
       },
     });
   }
+
+  // 조회
+  async getUserCounselings(user): Promise<Counseling[]> {
+    const userCounseling = await this.prismaService.counseling.findMany({
+      where: {
+        user_id: user.id,
+      },
+    });
+
+    return userCounseling;
+  }
 }

@@ -21,4 +21,17 @@ export class TwentyQuestionService {
       },
     });
   }
+
+  // 조회
+  async getUserTwentyQuestions(user): Promise<TwentyQuestion[]> {
+    const userTwentyQuestion = await this.prismaService.twentyQuestion.findMany(
+      {
+        where: {
+          user_id: user.id,
+        },
+      },
+    );
+
+    return userTwentyQuestion;
+  }
 }
