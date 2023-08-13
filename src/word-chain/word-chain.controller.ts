@@ -10,7 +10,7 @@ export class WordChainController {
   constructor(private readonly wordChainService: WordChainService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a user' })
+  @ApiOperation({ summary: '끝말잇기 페이지 채팅 추가' })
   @ApiBody({ type: CreateChatDto })
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
@@ -24,7 +24,7 @@ export class WordChainController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Create a user' })
+  @ApiOperation({ summary: '자신의 끝말잇기 페이지 채팅 조회' })
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
   async searchChatting(@Req() request): Promise<WordChain[]> {
