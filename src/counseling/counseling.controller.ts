@@ -1,10 +1,11 @@
 import { Controller, Post, Body, UseGuards, Req, Get } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateChatDto } from 'src/twenty-question/dto/create-chat.dto';
 import { CounselingService } from './counseling.service';
 import { Counseling } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
 
+@ApiTags('상담')
 @Controller('counseling')
 export class CounselingController {
   constructor(private readonly counselingService: CounselingService) {}

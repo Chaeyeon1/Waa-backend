@@ -1,10 +1,11 @@
 import { TwentyQuestionService } from './twenty-question.service';
 import { TwentyQuestion } from '@prisma/client';
 import { Controller, Post, Body, Req, UseGuards, Get } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { AuthGuard } from '@nestjs/passport';
 
+@ApiTags('스무고개')
 @Controller('twenty-question')
 export class TwentyQuestionController {
   constructor(private readonly twentyQuestionService: TwentyQuestionService) {}

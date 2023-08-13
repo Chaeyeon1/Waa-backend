@@ -1,10 +1,11 @@
 import { Controller, Post, Body, Req, UseGuards, Get } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateChatDto } from 'src/twenty-question/dto/create-chat.dto';
 import { WordChainService } from './word-chain.service';
 import { WordChain } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
 
+@ApiTags('끝말잇기')
 @Controller('word-chain')
 export class WordChainController {
   constructor(private readonly wordChainService: WordChainService) {}
