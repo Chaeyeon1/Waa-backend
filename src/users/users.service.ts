@@ -88,6 +88,30 @@ export class UsersService {
     });
   }
 
+  // 닉네임 수정
+  async updateUserName(user: User, username: string): Promise<boolean> {
+    await this.prismaService.user.update({
+      where: { id: Number(user.id) },
+      data: {
+        username,
+      },
+    });
+
+    return true;
+  }
+
+  // 나이 수정
+  async updateUserAge(user: User, age: number): Promise<boolean> {
+    await this.prismaService.user.update({
+      where: { id: Number(user.id) },
+      data: {
+        age,
+      },
+    });
+
+    return true;
+  }
+
   async updateRefreshToken(
     id: number,
     refreshToken: string,

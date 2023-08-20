@@ -12,7 +12,12 @@ import {
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto, ModifyPasswordDto } from './dto/user.dto';
+import {
+  CreateUserDto,
+  ModifyAgeDto,
+  ModifyNameDto,
+  ModifyPasswordDto,
+} from './dto/user.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
@@ -73,5 +78,29 @@ export class UsersController {
     const user = request.user;
 
     return this.userService.updateUserScore(user);
+  }
+
+  @ApiTags('유저')
+  @Put('/username')
+  @ApiOperation({ summary: '유저 닉네임 수정' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiBody({ type: ModifyNameDto })
+  async updateName(@Req() request, @Body() data): Promise<boolean> {
+    const user = request.user;
+
+    return this.userService.updateUserName(user, data.username);
+  }
+
+  @ApiTags('유저')
+  @Put('/age')
+  @ApiOperation({ summary: '유저 나이 수정' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiBody({ type: ModifyAgeDto })
+  async updateAge(@Req() request, @Body() data): Promise<boolean> {
+    const user = request.user;
+
+    return this.userService.updateUserAge(user, data.age);
   }
 }
