@@ -51,4 +51,15 @@ export class CounselingController {
 
     return this.counselingService.deleteAllCounselings(user);
   }
+
+  @Get('most-frequent')
+  @ApiOperation({ summary: '자신의 상담 페이지 자주 등장한 키워드' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async getMostFrequentKeywords(
+    @Req() request,
+  ): Promise<{ keyword: string; count: number }[]> {
+    const user = request.user;
+    return this.counselingService.getMostFrequentKeywords(user);
+  }
 }
