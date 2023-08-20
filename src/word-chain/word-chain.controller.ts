@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Req, UseGuards, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Req,
+  UseGuards,
+  Get,
+  Delete,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateChatDto } from 'src/twenty-question/dto/create-chat.dto';
 import { WordChainService } from './word-chain.service';
@@ -29,8 +37,18 @@ export class WordChainController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
   async searchChatting(@Req() request): Promise<WordChain[]> {
-    const user = request.user; // 현재 로그인된 사용자 정보
+    const user = request.user;
 
     return this.wordChainService.getUserWordChains(user);
+  }
+
+  @Delete()
+  @ApiOperation({ summary: '자신의 끝말잇기 페이지 채팅 전체 삭제' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async clearChatting(@Req() request): Promise<boolean> {
+    const user = request.user;
+
+    return this.wordChainService.deleteAllWordChains(user);
   }
 }

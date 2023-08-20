@@ -32,4 +32,14 @@ export class WordChainService {
 
     return userWordChains;
   }
+
+  async deleteAllWordChains(user) {
+    await this.prismaService.wordChain.deleteMany({
+      where: {
+        user_id: user.id,
+      },
+    });
+
+    return true;
+  }
 }
