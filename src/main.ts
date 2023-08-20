@@ -25,7 +25,6 @@ async function bootstrap() {
       },
       'access-token',
     )
-    // .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
