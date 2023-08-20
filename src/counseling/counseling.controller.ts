@@ -29,7 +29,7 @@ export class CounselingController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
   async searchChatting(@Req() request): Promise<Counseling[]> {
-    const user = request.user; // 현재 로그인된 사용자 정보
+    const user = request.user;
 
     return this.counselingService.getUserCounselings(user);
   }

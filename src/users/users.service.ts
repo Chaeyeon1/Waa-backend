@@ -66,11 +66,24 @@ export class UsersService {
   }
 
   // 비밀번호 수정
-  async updateUser(id: number, password: string): Promise<User | null> {
-    return this.prismaService.user.update({
-      where: { id: Number(id) },
+  async updateUserPassword(user: User, password: string): Promise<boolean> {
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    await this.prismaService.user.update({
+      where: { id: Number(user.id) },
       data: {
-        password,
+        password: hashedPassword,
+      },
+    });
+
+    return true;
+  }
+
+  // 스코어 수정
+  async updateUserScore(user: User): Promise<User | null> {
+    return this.prismaService.user.update({
+      where: { id: Number(user.id) },
+      data: {
+        score: user.score + 1,
       },
     });
   }

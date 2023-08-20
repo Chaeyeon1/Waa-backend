@@ -43,17 +43,6 @@ export class UsersController {
   }
 
   @ApiTags('유저')
-  @Put(':id')
-  @ApiOperation({ summary: '유저 비밀번호 수정' })
-  @ApiBody({ type: ModifyPasswordDto })
-  async updateUser(
-    @Param('id') id: number,
-    @Body() data: User,
-  ): Promise<User | null> {
-    return this.userService.updateUser(id, data.password);
-  }
-
-  @ApiTags('유저')
   @Get('/')
   @ApiOperation({ summary: '전체 유저 조회' })
   @UseGuards(AuthGuard('jwt'))
@@ -61,5 +50,28 @@ export class UsersController {
   async getProfile(@Req() req: any) {
     const user = req.user;
     return user;
+  }
+
+  @ApiTags('유저')
+  @Put('/password')
+  @ApiOperation({ summary: '유저 비밀번호 수정' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiBody({ type: ModifyPasswordDto })
+  async updateUser(@Req() request, @Body() data): Promise<boolean> {
+    const user = request.user;
+
+    return this.userService.updateUserPassword(user, data.password);
+  }
+
+  @ApiTags('유저')
+  @Put('/score')
+  @ApiOperation({ summary: '유저 스코어 수정' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async updateScore(@Req() request): Promise<User | null> {
+    const user = request.user;
+
+    return this.userService.updateUserScore(user);
   }
 }

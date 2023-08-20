@@ -15,3 +15,8 @@ export class ModifyPasswordDto {
   @ApiProperty({ description: '비밀번호', default: 'hong', required: true })
   password: string;
 }
+
+export class ModifyScoreDto {
+  @ApiProperty({ description: '점수', default: 0, required: true })
+  score: string;
+}
