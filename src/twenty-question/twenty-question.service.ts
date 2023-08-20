@@ -34,4 +34,15 @@ export class TwentyQuestionService {
 
     return userTwentyQuestion;
   }
+
+  // 전체 삭제
+  async deleteAllTwentyQuestions(user) {
+    await this.prismaService.twentyQuestion.deleteMany({
+      where: {
+        user_id: user.id,
+      },
+    });
+
+    return true;
+  }
 }

@@ -33,6 +33,7 @@ export class WordChainService {
     return userWordChains;
   }
 
+  // 전체 삭제
   async deleteAllWordChains(user) {
     await this.prismaService.wordChain.deleteMany({
       where: {

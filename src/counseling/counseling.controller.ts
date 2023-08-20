@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseGuards, Req, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  Get,
+  Delete,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateChatDto } from 'src/twenty-question/dto/create-chat.dto';
 import { CounselingService } from './counseling.service';
@@ -32,5 +40,15 @@ export class CounselingController {
     const user = request.user;
 
     return this.counselingService.getUserCounselings(user);
+  }
+
+  @Delete()
+  @ApiOperation({ summary: '자신의 상담 페이지 채팅 전체 삭제' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async clearChatting(@Req() request): Promise<boolean> {
+    const user = request.user;
+
+    return this.counselingService.deleteAllCounselings(user);
   }
 }

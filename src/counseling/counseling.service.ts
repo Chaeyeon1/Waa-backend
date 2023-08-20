@@ -32,4 +32,15 @@ export class CounselingService {
 
     return userCounseling;
   }
+
+  // 전체 삭제
+  async deleteAllCounselings(user) {
+    await this.prismaService.counseling.deleteMany({
+      where: {
+        user_id: user.id,
+      },
+    });
+
+    return true;
+  }
 }
