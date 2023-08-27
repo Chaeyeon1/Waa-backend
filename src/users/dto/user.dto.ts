@@ -23,5 +23,5 @@ export class ModifyNameDto {
 
 export class ModifyAgeDto {
   @ApiProperty({ description: '나이', default: 0, required: true })
-  age: string;
+  age: number;
 }
