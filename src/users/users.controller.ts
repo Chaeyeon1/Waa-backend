@@ -34,28 +34,35 @@ export class UsersController {
 
   // 단일 조회
   @ApiTags('유저')
-  @Get(':id')
+  @Get()
   @ApiOperation({ summary: '유저 조회' })
-  async searchUser(@Param('id') id: number): Promise<User | null> {
-    return this.userService.searchUser(id);
-  }
-
-  @ApiTags('유저')
-  @Delete(':id')
-  @ApiOperation({ summary: '유저 삭제' })
-  async deleteUser(@Param('id') id: number): Promise<User | null> {
-    return this.userService.deleteUser(id);
-  }
-
-  @ApiTags('유저')
-  @Get('/')
-  @ApiOperation({ summary: '전체 유저 조회' })
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
-  async getProfile(@Req() req: any) {
-    const user = req.user;
-    return user;
+  async searchUser(@Req() request): Promise<User | null> {
+    const user = request.user;
+    return this.userService.searchUser(user);
   }
+
+  @ApiTags('유저')
+  @Delete()
+  @ApiOperation({ summary: '유저 삭제' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async deleteUser(@Req() request): Promise<User | null> {
+    const user = request.user;
+
+    return this.userService.deleteUser(user);
+  }
+
+  // @ApiTags('유저')
+  // @Get('/')
+  // @ApiOperation({ summary: '전체 유저 조회' })
+  // @UseGuards(AuthGuard('jwt'))
+  // @ApiBearerAuth('access-token')
+  // async getProfile(@Req() req: any) {
+  //   const user = req.user;
+  //   return user;
+  // }
 
   @ApiTags('유저')
   @Put('/password')

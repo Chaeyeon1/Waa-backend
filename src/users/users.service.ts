@@ -56,13 +56,15 @@ export class UsersService {
   }
 
   // 단일 조회
-  async searchUser(id: number): Promise<User | null> {
-    return this.prismaService.user.findUnique({ where: { id: Number(id) } });
+  async searchUser(user: User): Promise<User | null> {
+    return this.prismaService.user.findUnique({
+      where: { id: Number(user.id) },
+    });
   }
 
   // 삭제
-  async deleteUser(id: number): Promise<User | null> {
-    return this.prismaService.user.delete({ where: { id: Number(id) } });
+  async deleteUser(user: User): Promise<User | null> {
+    return this.prismaService.user.delete({ where: { id: Number(user.id) } });
   }
 
   // 비밀번호 수정
