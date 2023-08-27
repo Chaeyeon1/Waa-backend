@@ -14,7 +14,7 @@ import { JwtStrategy } from './security/passport.jwt';
     UsersModule,
     JwtModule.register({
       secret: env.SECRET_KEY,
-      signOptions: { expiresIn: '300s' },
+      signOptions: { expiresIn: '3000000000000s' }, // 기존 300s
     }),
     PassportModule,
   ],
