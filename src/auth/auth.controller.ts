@@ -39,7 +39,7 @@ export class AuthController {
 
     this.userService.updateRefreshToken(user.id, refreshToken);
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, userId, id: user.id };
   }
 
   @Post('refresh')
