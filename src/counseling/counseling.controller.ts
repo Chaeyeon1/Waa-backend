@@ -62,4 +62,19 @@ export class CounselingController {
     const user = request.user;
     return this.counselingService.getMostFrequentKeywords(user);
   }
+
+  @Get('dangerous-keyword')
+  @ApiOperation({ summary: '위험의심 키워드' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async getDangerousKeywordsContent(
+    @Req() request,
+  ): Promise<{ dangerousContent: string[] }> {
+    const user = request.user;
+
+    const dangerousContent =
+      await this.counselingService.getDangerousKeywordsContent(user);
+
+    return { dangerousContent };
+  }
 }

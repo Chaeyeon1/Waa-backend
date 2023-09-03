@@ -81,4 +81,42 @@ export class CounselingService {
 
     return keywordsWithCount;
   }
+
+  // 위험 의심 키워드
+  async getDangerousKeywordsContent(user): Promise<string[]> {
+    // 위험 의심 키워드 정의
+    const dangerousKeywords = [
+      '시발',
+      '자살',
+      '왕따',
+      '따돌림',
+      '욕설',
+      '폭력',
+      '폭행',
+      '술',
+      '마약',
+      '스트레스',
+    ];
+
+    const counselingContent = await this.prismaService.counseling.findMany({
+      where: {
+        user_id: user.id,
+      },
+      select: { content: true },
+    });
+
+    const dangerousContent = [];
+
+    for (const counseling of counselingContent) {
+      const content = counseling.content;
+      const contentLower = content.toLowerCase();
+
+      // counseling 내용이 위험 의심 키워드를 포함하는지 확인
+      if (dangerousKeywords.some((keyword) => contentLower.includes(keyword))) {
+        dangerousContent.push(content);
+      }
+    }
+
+    return dangerousContent;
+  }
 }

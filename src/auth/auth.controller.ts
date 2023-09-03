@@ -27,7 +27,8 @@ export class AuthController {
       throw new UnauthorizedException('아이디 또는 비밀번호를 확인해 주세요.');
     }
 
-    const isSamePassword = bcrypt.compareSync(password, user.password);
+    const isSamePassword: boolean = bcrypt.compareSync(password, user.password);
+
     if (!isSamePassword) {
       throw new UnauthorizedException('이메일 또는 비밀번호를 확인해 주세요.');
     }
