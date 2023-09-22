@@ -12,7 +12,13 @@ export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
   async createUser(data: User): Promise<User> {
-    if (!data || !data.userId || !data.username || !data.password) {
+    if (
+      !data ||
+      !data.userId ||
+      !data.username ||
+      !data.password ||
+      !data.age
+    ) {
       throw new BadRequestException('필요한 정보를 모두 적어주세요.');
     }
 
@@ -34,8 +40,7 @@ export class UsersService {
         password: hashedPassword,
         username: data.username,
         score: data.score || 0,
-        // 나이는 추후 설정 가능하도록
-        age: data.age || null,
+        age: data.age,
         accessToken: data.accessToken || null,
         refreshToken: data.refreshToken || null,
       },
