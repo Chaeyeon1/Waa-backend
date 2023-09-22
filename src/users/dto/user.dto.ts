@@ -9,6 +9,9 @@ export class CreateUserDto {
 
   @ApiProperty({ description: '비밀번호', default: 'honghong', required: true })
   password: string;
+
+  @ApiProperty({ description: '나이', default: 23, required: true })
+  age: number;
 }
 
 export class ModifyPasswordDto {
