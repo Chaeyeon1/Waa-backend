@@ -48,11 +48,17 @@ export class UsersService {
   }
 
   async findById(userId: string) {
-    return await this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         userId,
       },
     });
+
+    if (!user) {
+      throw new Error('사용자를 찾을 수 없습니다.');
+    }
+
+    return user;
   }
 
   // 전체 조회
