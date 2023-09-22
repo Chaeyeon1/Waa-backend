@@ -66,27 +66,50 @@ export class UsersService {
     return this.prismaService.user.findMany();
   }
 
-  // 단일 조회
   async searchUser(user: User): Promise<User | null> {
-    return this.prismaService.user.findUnique({
+    // 사용자 아이디 유효성 검사
+    const foundUser = await this.prismaService.user.findUnique({
       where: { id: Number(user.id) },
     });
+
+    if (!foundUser) {
+      throw new Error('사용자를 찾을 수 없습니다.');
+    }
+
+    return foundUser;
   }
 
-  // 삭제
   async deleteUser(user: User): Promise<User | null> {
-    return this.prismaService.user.delete({ where: { id: Number(user.id) } });
+    // 사용자 아이디 유효성 검사
+    const deletedUser = await this.prismaService.user.delete({
+      where: { id: Number(user.id) },
+    });
+
+    if (!deletedUser) {
+      throw new Error('사용자를 찾을 수 없거나 삭제 중에 문제가 발생했습니다.');
+    }
+
+    return deletedUser;
   }
 
   // 비밀번호 수정
   async updateUserPassword(user: User, password: string): Promise<boolean> {
+    // 비밀번호 해시화
     const hashedPassword = bcrypt.hashSync(password, 10);
-    await this.prismaService.user.update({
+
+    // 사용자 비밀번호 업데이트
+    const updatedUser = await this.prismaService.user.update({
       where: { id: Number(user.id) },
       data: {
         password: hashedPassword,
       },
     });
+
+    if (!updatedUser) {
+      throw new Error(
+        '사용자를 찾을 수 없거나 비밀번호 업데이트 중에 문제가 발생했습니다.',
+      );
+    }
 
     return true;
   }
