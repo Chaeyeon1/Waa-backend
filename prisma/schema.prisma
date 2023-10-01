@@ -29,6 +29,7 @@ model User {
   counselings Counseling[]
   twentyQuestions TwentyQuestion[]  
   wordChains  WordChain[]  
+  keywordCounts KeywordCount[] 
 }
 
 
@@ -57,4 +58,13 @@ model WordChain {
   content  String
   user_id  Int?
   user     User?   @relation(fields: [user_id], references: [id])
+}
+
+model KeywordCount {
+  id Int @default(autoincrement()) @id
+  keyword String  
+  content String?
+  count Int       
+  user User @relation(fields: [userId], references: [id]) 
+  userId Int
 }
