@@ -26,12 +26,6 @@ import { PrismaService } from './prisma.service';
     MailerModule,
   ],
   controllers: [AppController, MailController],
-  providers: [
-    AppService,
-    MailerService,
-    MailService,
-    CounselingService,
-    PrismaService,
-  ],
+  providers: [AppService, MailService, CounselingService, PrismaService],
 })
 export class AppModule {}
