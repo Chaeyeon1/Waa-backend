@@ -15,8 +15,6 @@ export class MailController {
   async sendEmail(@Req() request) {
     const user = request.user;
 
-    console.log(user);
-
     return this.mailService.sendEmail(user);
   }
 }

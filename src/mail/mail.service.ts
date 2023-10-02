@@ -10,9 +10,12 @@ export class MailService {
   ) {}
 
   async sendEmail(user) {
-    const keywords = await this.counselingService.getDangerousKeywordsContent({
-      user,
-    });
+    const keywordsData =
+      await this.counselingService.getDangerousKeywordsContent({
+        user,
+      });
+
+    const keywords = keywordsData ?? [];
 
     await this.mailerService
       .sendMail({
@@ -20,8 +23,6 @@ export class MailService {
         subject: '자녀의 위험 의심 단어 목록',
         template: './email',
         context: {
-          code: 'cf1a3f828287',
-          username: 'Chaeyeon',
           keywords,
         },
       })
