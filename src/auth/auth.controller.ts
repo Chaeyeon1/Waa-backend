@@ -20,26 +20,38 @@ export class AuthController {
   @ApiOperation({ summary: '로그인' })
   @ApiBody({ type: LoginDto })
   async signin(@Body() data: User) {
-    const { userId, password } = data;
+    try {
+      const { userId, password } = data;
 
-    const user = await this.userService.findById(userId);
-    if (!user) {
-      throw new UnauthorizedException('아이디 또는 비밀번호를 확인해 주세요.');
+      const user = await this.userService.findById(userId);
+      if (!user) {
+        throw new UnauthorizedException(
+          '아이디 또는 비밀번호를 확인해 주세요.',
+        );
+      }
+
+      const isSamePassword: boolean = bcrypt.compareSync(
+        password,
+        user.password,
+      );
+
+      if (!isSamePassword) {
+        throw new UnauthorizedException(
+          '이메일 또는 비밀번호를 확인해 주세요.',
+        );
+      }
+
+      const payload = { userId: user.userId };
+      const accessToken = this.jwtService.sign(payload);
+      const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });
+
+      this.userService.updateRefreshToken(user.id, refreshToken);
+
+      return { accessToken, refreshToken, userId, id: user.id };
+    } catch (error) {
+      // 예외가 발생하면 이 부분에서 처리하고자 하는 반환 값을 설정합니다.
+      return { error: error.message || '알 수 없는 오류 발생' };
     }
-
-    const isSamePassword: boolean = bcrypt.compareSync(password, user.password);
-
-    if (!isSamePassword) {
-      throw new UnauthorizedException('이메일 또는 비밀번호를 확인해 주세요.');
-    }
-
-    const payload = { userId: user.userId };
-    const accessToken = this.jwtService.sign(payload);
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });
-
-    this.userService.updateRefreshToken(user.id, refreshToken);
-
-    return { accessToken, refreshToken, userId, id: user.id };
   }
 
   @Post('refresh')
