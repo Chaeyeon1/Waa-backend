@@ -1,12 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { CounselingService } from 'src/counseling/counseling.service';
 
 @Injectable()
 export class MailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(
+    private readonly mailerService: MailerService,
+    private readonly counselingService: CounselingService,
+  ) {}
 
-  async sendEmail() {
-    //메일 전송 테스트
+  async sendEmail(user) {
+    const keywords = await this.counselingService.getDangerousKeywordsContent({
+      user,
+    });
+
     await this.mailerService
       .sendMail({
         to: 'slide10245@naver.com',
@@ -15,10 +22,7 @@ export class MailService {
         context: {
           code: 'cf1a3f828287',
           username: 'Chaeyeon',
-          keywords: [
-            { value: '자살', count: 6 },
-            { value: '따돌림', count: 7 },
-          ],
+          keywords,
         },
       })
       .then((response) => {

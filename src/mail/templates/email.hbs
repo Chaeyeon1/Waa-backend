@@ -33,10 +33,9 @@
             text-align: center;
           '
     >
-      아래는 5회 초과한 단어 리스트입니다.
+      아래는 위험 의심 단어 리스트입니다.
     </td>
   </tr>
-  <!-- 본문 컨텐츠 영역 -->
   <tr>
     <td
       style='
@@ -58,7 +57,7 @@
       >
         {{#each keywords}}
           <div style='margin-bottom: 8px'>
-            {{value}}
+            {{keyword}}
             :
             {{count}}
           </div>

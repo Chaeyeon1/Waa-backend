@@ -8,10 +8,11 @@ import { WordChainModule } from './word-chain/word-chain.module';
 import { AuthModule } from './auth/auth.module';
 import { SendSMSModule } from './sendSMS/sendSMS.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailController } from './mail/mail.controller';
 import { MailService } from './mail/mail.service';
 import { MailModule } from './mail/mail.module';
+import { CounselingService } from './counseling/counseling.service';
+import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -22,8 +23,9 @@ import { MailModule } from './mail/mail.module';
     WordChainModule,
     SendSMSModule,
     MailModule,
+    MailerModule,
   ],
   controllers: [AppController, MailController],
-  providers: [AppService, MailService],
+  providers: [AppService, MailService, CounselingService, PrismaService],
 })
 export class AppModule {}
