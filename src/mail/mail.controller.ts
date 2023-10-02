@@ -20,6 +20,7 @@ export class MailController {
   }
 
   @Post('authentication')
+  @ApiTags('Auth')
   @ApiOperation({ summary: '이메일 인증' })
   @ApiBody({ type: MailDto })
   async getDangerousKeywordsContent(@Body() email): Promise<string> {
