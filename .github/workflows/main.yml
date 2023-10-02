@@ -21,11 +21,11 @@ jobs:
           script: |
             export DATABASE_URL=${{ secrets.DATABASE_URL }}
             export SECRET_KEY=${{ secrets.SECRET_KEY }}
-            export SECRET_KEY=${{ secrets.TWILIO_ACCOUNT_SID }}
-            export SECRET_KEY=${{ secrets.TWILIO_AUTH_TOKEN }}
-            export SECRET_KEY=${{ secrets.MY_SERVICE_NUMBER }}
-            export SECRET_KEY=${{ secrets.EMAILADDRESS }}
-            export SECRET_KEY=${{ secrets.EMAILPASSWORD }}
+            export TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
+            export TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
+            export MY_SERVICE_NUMBER=${{ secrets.MY_SERVICE_NUMBER }}
+            export EMAILADDRESS=${{ secrets.EMAILADDRESS }}
+            export EMAILPASSWORD=${{ secrets.EMAILPASSWORD }}
             sudo apt update
             sudo apt install git
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
