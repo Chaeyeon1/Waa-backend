@@ -9,9 +9,9 @@ export class SendSMSController {
 
   @Get()
   @ApiTags('Auth')
-  //   @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: '메시지 보내기' })
-  //   @ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   async createUser() {
     return this.userService.sendSMS();
   }
