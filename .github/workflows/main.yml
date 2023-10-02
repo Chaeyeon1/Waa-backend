@@ -38,4 +38,5 @@ jobs:
             ls
             pm2 kill
             git pull origin main
-            npm run start
+            npm run build
+            npm run start:prod
