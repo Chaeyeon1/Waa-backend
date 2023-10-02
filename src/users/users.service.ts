@@ -17,7 +17,8 @@ export class UsersService {
       !data.userId ||
       !data.username ||
       !data.password ||
-      !data.age
+      !data.age ||
+      !data.email
     ) {
       throw new BadRequestException('필요한 정보를 모두 적어주세요.');
     }
@@ -43,6 +44,7 @@ export class UsersService {
         age: data.age,
         accessToken: data.accessToken || null,
         refreshToken: data.refreshToken || null,
+        email: data.email,
       },
     });
   }

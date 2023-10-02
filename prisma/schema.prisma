@@ -20,6 +20,7 @@ model Todo {
 model User {
   id Int @default(autoincrement()) @id
   username String?
+  email String?
   score Int?
   age Int?
   userId String @unique
