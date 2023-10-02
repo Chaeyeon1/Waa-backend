@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { Module } from '@nestjs/common';
-import { MailerModule } from '@nestjs-modules/mailer';
+import { MailerModule, MailerService } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailService } from './mail.service';
 import { MailController } from './mail.controller';
@@ -33,6 +33,6 @@ import { CounselingService } from 'src/counseling/counseling.service';
     }),
   ],
   controllers: [MailController],
-  providers: [MailService, PrismaService, CounselingService],
+  providers: [MailService, MailerService, PrismaService, CounselingService],
 })
 export class MailModule {}

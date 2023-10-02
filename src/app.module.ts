@@ -32,7 +32,6 @@ import { PrismaService } from './prisma.service';
     MailService,
     CounselingService,
     PrismaService,
-    MailService,
   ],
 })
 export class AppModule {}
