@@ -1,10 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Counseling, User } from '@prisma/client';
+import { MailService } from 'src/mail/mail.service';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class CounselingService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private mailService: MailService,
+  ) {}
 
   // 추가
   async addChatting(data: Counseling, user: User): Promise<Counseling> {
@@ -138,6 +142,9 @@ export class CounselingService {
           count: existingKeywordCount.count + 1,
         },
       });
+      if (existingKeywordCount.count > 5) {
+        await this.mailService.sendEmail(user);
+      }
     } else {
       // 해당 키워드에 대한 카운트가 없는 경우, 새로운 레코드 생성
       await this.prismaService.keywordCount.create({
