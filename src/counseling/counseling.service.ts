@@ -185,7 +185,6 @@ export class CounselingService {
       },
     });
 
-    console.log(storedInformations);
     if (storedInformations) {
       storedInformations.forEach((storedInformation) => {
         // dangerousContent에 해당 키워드가 있는지 확인합니다.
