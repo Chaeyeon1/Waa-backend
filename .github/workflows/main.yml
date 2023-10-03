@@ -31,8 +31,9 @@ jobs:
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+            sudo rm -rf /home/ubuntu/.nvm/versions/node/v20.8.0/lib/node_modules/pm2
             nvm install node
-            npm install pm2
+            npm install -g pm2
             cd Waa-backend
             npm install
             ls
