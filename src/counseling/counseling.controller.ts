@@ -12,6 +12,7 @@ import { CreateChatDto } from 'src/twenty-question/dto/create-chat.dto';
 import { CounselingService } from './counseling.service';
 import { Counseling } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
+import { CounselingDangerousKeywordProps } from './counseling.dto';
 
 @ApiTags('상담')
 @Controller('counseling')
@@ -69,7 +70,7 @@ export class CounselingController {
   @ApiBearerAuth('access-token')
   async getDangerousKeywordsContent(
     @Req() request,
-  ): Promise<{ dangerousContent: string[] }> {
+  ): Promise<{ dangerousContent: CounselingDangerousKeywordProps }> {
     const user = request.user;
 
     const dangerousContent =

@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Counseling, User } from '@prisma/client';
 import { MailService } from 'src/mail/mail.service';
 import { PrismaService } from 'src/prisma.service';
+import { CounselingDangerousKeywordProps } from './counseling.dto';
 
 @Injectable()
 export class CounselingService {
@@ -124,29 +125,44 @@ export class CounselingService {
     keyword: string,
     content: string,
   ): Promise<void> {
-    const existingKeywordCount =
+    const existingKeywordContent =
       await this.prismaService.keywordCount.findFirst({
         where: {
           userId,
-          keyword,
+          content,
         },
       });
 
-    if (existingKeywordCount) {
-      // 이미 해당 키워드에 대한 카운트가 있는 경우, 카운트를 증가시킴
+    const existingKeywords = await this.prismaService.keywordCount.findMany({
+      where: {
+        userId,
+        keyword,
+      },
+    });
+
+    const totalExistingCount = existingKeywords.reduce(
+      (acc, cur) => acc + cur.count,
+      0,
+    );
+
+    // 만약 전체 카운트가 6이라면, 5회 초과 이메일 보냄
+    if (totalExistingCount >= 5) {
+      await this.mailService.sendEmail(user);
+    }
+
+    // 키워드 들어온 거 DB에 저장 로직
+    if (existingKeywordContent) {
+      // 아예 content도 같은 경우는 count만 증가시킴
       await this.prismaService.keywordCount.update({
         where: {
-          id: existingKeywordCount.id,
+          id: existingKeywordContent.id,
         },
         data: {
-          count: existingKeywordCount.count + 1,
+          count: existingKeywordContent.count + 1,
         },
       });
-      if (existingKeywordCount.count > 5) {
-        await this.mailService.sendEmail(user);
-      }
     } else {
-      // 해당 키워드에 대한 카운트가 없는 경우, 새로운 레코드 생성
+      // 컨텐츠가 다르다면, 새로운 레코드 생성
       await this.prismaService.keywordCount.create({
         data: {
           userId,
@@ -158,23 +174,38 @@ export class CounselingService {
     }
   }
 
-  async getDangerousKeywordsContent(user): Promise<string[]> {
-    const dangerousContent = [];
+  async getDangerousKeywordsContent(
+    user,
+  ): Promise<CounselingDangerousKeywordProps> {
+    const dangerousContent: CounselingDangerousKeywordProps = [];
 
-    const keywordCount = await this.prismaService.keywordCount.findMany({
+    const storedInformations = await this.prismaService.keywordCount.findMany({
       where: {
         userId: user.id,
       },
     });
 
-    if (keywordCount) {
-      // 해당 키워드에 대한 카운트가 있는 경우, 키워드와 카운트 정보를 반환
-      keywordCount.map((keyword) => {
-        dangerousContent.push({
-          keyword: keyword.keyword,
-          count: keyword.count,
-          content: keyword.content,
-        });
+    console.log(storedInformations);
+    if (storedInformations) {
+      storedInformations.forEach((storedInformation) => {
+        // dangerousContent에 해당 키워드가 있는지 확인합니다.
+        const existingEntry = dangerousContent.find(
+          (dangerous) => dangerous.keyword === storedInformation.keyword,
+        );
+
+        if (existingEntry) {
+          // 만약 해당 키워드가 이미 있다면, content 배열을 업데이트합니다.
+          existingEntry.content.push(storedInformation.content);
+          // count를 업데이트하고 storedInformation.count를 추가합니다.
+          existingEntry.count += storedInformation.count;
+        } else {
+          // 만약 일치하는 키워드가 없다면, 새 항목을 만듭니다.
+          dangerousContent.push({
+            keyword: storedInformation.keyword,
+            count: storedInformation.count,
+            content: [storedInformation.content],
+          });
+        }
       });
     }
 
