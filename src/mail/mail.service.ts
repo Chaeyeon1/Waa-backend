@@ -1,20 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { CounselingService } from 'src/counseling/counseling.service';
 import { User } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class MailService {
   constructor(
     private readonly mailerService: MailerService,
-    private readonly counselingService: CounselingService,
+    private readonly prismaService: PrismaService,
   ) {}
 
-  async sendEmail(user: User) {
-    const keywordsData =
-      await this.counselingService.getDangerousKeywordsContent({
-        user,
+  async getDangerousKeywordsContent(user): Promise<string[]> {
+    const dangerousContent = [];
+
+    const keywordCount = await this.prismaService.keywordCount.findMany({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    if (keywordCount) {
+      // 해당 키워드에 대한 카운트가 있는 경우, 키워드와 카운트 정보를 반환
+      keywordCount.map((keyword) => {
+        dangerousContent.push({
+          keyword: keyword.keyword,
+          count: keyword.count,
+          content: keyword.content,
+        });
       });
+    }
+
+    return dangerousContent;
+  }
+
+  async sendEmail(user: User) {
+    const keywordsData = await this.getDangerousKeywordsContent({
+      user,
+    });
 
     const keywords = keywordsData ?? [];
 
