@@ -1,4 +1,11 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UnauthorizedException,
+  HttpStatus,
+  HttpException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '../users/users.service';
@@ -50,7 +57,10 @@ export class AuthController {
       return { accessToken, refreshToken, userId, id: user.id };
     } catch (error) {
       // 예외가 발생하면 이 부분에서 처리하고자 하는 반환 값을 설정합니다.
-      return { error: error.message || '알 수 없는 오류 발생' };
+      throw new HttpException(
+        error.message || '알 수 없는 오류 발생',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 
