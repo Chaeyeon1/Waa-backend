@@ -31,6 +31,7 @@ model User {
   twentyQuestions TwentyQuestion[]  
   wordChains  WordChain[]  
   keywordCounts KeywordCount[] 
+  quiz Quiz[]
 }
 
 
@@ -68,4 +69,13 @@ model KeywordCount {
   count Int       
   user User @relation(fields: [userId], references: [id]) 
   userId Int
+}
+
+model Quiz {
+  id Int @id @default(autoincrement()) 
+  age Int
+  question String
+  answer String
+  user_id  Int?
+  user     User?   @relation(fields: [user_id], references: [id])
 }

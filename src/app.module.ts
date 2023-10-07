@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailModule } from './mail/mail.module';
 import { PrismaService } from './prisma.service';
+import { QuizModule } from './quiz/quiz.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PrismaService } from './prisma.service';
     WordChainModule,
     MailModule,
     MailerModule,
+    QuizModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
