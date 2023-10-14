@@ -71,7 +71,6 @@ export class MailService {
 
   // 유저 아이디로 유저 정보 찾기
   async findById(userId: string) {
-    console.log(userId);
     const user = await this.prismaService.user.findUnique({
       where: {
         userId,
