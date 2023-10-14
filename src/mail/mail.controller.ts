@@ -26,4 +26,15 @@ export class MailController {
   async getDangerousKeywordsContent(@Body() email): Promise<string> {
     return this.mailService.sendAuthenticationEmail(email);
   }
+
+  @Post('reset-password')
+  @ApiTags('Auth')
+  @ApiOperation({ summary: '비밀번호 재설정' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async postPasswordResetContent(@Req() request): Promise<string> {
+    const user = request.user;
+
+    return this.mailService.setForgetPassword(user);
+  }
 }

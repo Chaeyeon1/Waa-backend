@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class MailService {
@@ -57,7 +58,6 @@ export class MailService {
       });
   }
 
-  // 새로운 메서드: 랜덤 인증 코드 생성
   generateRandomCode(length: number) {
     const characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -69,8 +69,54 @@ export class MailService {
     return code;
   }
 
+  // 비밀번호 수정
+  async updateUserPassword(user: User, password: string): Promise<boolean> {
+    // 비밀번호 해시화
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
+    // 사용자 비밀번호 업데이트
+    const updatedUser = await this.prismaService.user.update({
+      where: { id: Number(user.id) },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    if (!updatedUser) {
+      throw new Error(
+        '사용자를 찾을 수 없거나 비밀번호 업데이트 중에 문제가 발생했습니다.',
+      );
+    }
+
+    return true;
+  }
+
+  async setForgetPassword(user: User): Promise<string> {
+    const code = this.generateRandomCode(12);
+
+    this.updateUserPassword(user, code);
+
+    return await this.mailerService
+      .sendMail({
+        to: user.email,
+        subject: '인증 코드',
+        template: './emailforgetPassword',
+        context: {
+          code, // 랜덤 인증 코드 추가
+        },
+      })
+      .then(() => {
+        return code;
+      })
+      .catch((err) => {
+        console.log(err);
+
+        return '이메일을 보내는 데 실패하였습니다.';
+      });
+  }
+
   async sendAuthenticationEmail(user: User): Promise<string> {
-    const code = this.generateRandomCode(6); // 6자리 랜덤 인증 코드 생성
+    const code = this.generateRandomCode(6);
 
     return await this.mailerService
       .sendMail({
@@ -81,9 +127,7 @@ export class MailService {
           code, // 랜덤 인증 코드 추가
         },
       })
-      .then((response) => {
-        console.log(response);
-
+      .then(() => {
         return code;
       })
       .catch((err) => {
