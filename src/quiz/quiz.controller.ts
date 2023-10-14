@@ -2,8 +2,8 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateQuizDto } from './quizDto';
-import { Quiz } from '@prisma/client';
 import { QuizService } from './quiz.service';
+import { Quiz } from '@prisma/client';
 
 @ApiTags('퀴즈')
 @Controller('/quiz')

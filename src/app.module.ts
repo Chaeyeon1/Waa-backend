@@ -8,7 +8,6 @@ import { WordChainModule } from './word-chain/word-chain.module';
 import { AuthModule } from './auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailModule } from './mail/mail.module';
-import { PrismaService } from './prisma.service';
 import { QuizModule } from './quiz/quiz.module';
 
 @Module({
@@ -23,6 +22,6 @@ import { QuizModule } from './quiz/quiz.module';
     QuizModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService],
 })
 export class AppModule {}
