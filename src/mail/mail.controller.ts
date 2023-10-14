@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { MailDto } from './mail.dto';
+import { MailDto, MailForgetDto } from './mail.dto';
 
 @Controller('mail')
 export class MailController {
@@ -30,11 +30,8 @@ export class MailController {
   @Post('reset-password')
   @ApiTags('Auth')
   @ApiOperation({ summary: '비밀번호 재설정' })
-  @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth('access-token')
-  async postPasswordResetContent(@Req() request): Promise<string> {
-    const user = request.user;
-
-    return this.mailService.setForgetPassword(user);
+  @ApiBody({ type: MailForgetDto })
+  async postPasswordResetContent(@Body() userId): Promise<string> {
+    return this.mailService.setForgetPassword(userId);
   }
 }

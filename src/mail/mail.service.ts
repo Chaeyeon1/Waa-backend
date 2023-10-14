@@ -69,6 +69,22 @@ export class MailService {
     return code;
   }
 
+  // 유저 아이디로 유저 정보 찾기
+  async findById(userId: string) {
+    console.log(userId);
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    if (!user) {
+      throw new Error('사용자를 찾을 수 없습니다.');
+    }
+
+    return user;
+  }
+
   // 비밀번호 수정
   async updateUserPassword(user: User, password: string): Promise<boolean> {
     // 비밀번호 해시화
@@ -91,8 +107,10 @@ export class MailService {
     return true;
   }
 
-  async setForgetPassword(user: User): Promise<string> {
+  async setForgetPassword(userId: { userId: string }): Promise<string> {
     const code = this.generateRandomCode(12);
+
+    const user = await this.findById(userId.userId);
 
     this.updateUserPassword(user, code);
 
