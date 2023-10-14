@@ -76,8 +76,8 @@ model Quiz {
   age Int
   question String
   answer String
-  userId  Int?
-  user     User?   @relation(fields: [userId], references: [id])
+  user_id  Int?
+  user     User?   @relation(fields: [user_id], references: [id])
 }
 
 model Stock {
