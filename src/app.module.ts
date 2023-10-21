@@ -9,8 +9,6 @@ import { AuthModule } from './auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailModule } from './mail/mail.module';
 import { QuizModule } from './quiz/quiz.module';
-import { MemoryGameService } from './memory-game/memory-game.service';
-import { MemoryGameController } from './memory-game/memory-game.controller';
 import { MemoryGameModule } from './memory-game/memory-game.module';
 
 @Module({
@@ -25,7 +23,7 @@ import { MemoryGameModule } from './memory-game/memory-game.module';
     QuizModule,
     MemoryGameModule,
   ],
-  controllers: [AppController, MemoryGameController],
-  providers: [AppService, MemoryGameService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

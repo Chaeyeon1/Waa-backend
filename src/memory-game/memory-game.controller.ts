@@ -1,10 +1,22 @@
-import { Controller, Get, Headers } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { MemoryGameService } from './memory-game.service';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateMemoryGameDto } from './memoryGameDto';
+import { AuthGuard } from '@nestjs/passport';
+import { MemoryGame } from '@prisma/client';
 
+@ApiTags('기억력 테스트')
 @Controller('memory-game')
 export class MemoryGameController {
-  constructor(private readonly memoryService: MemoryGameService) {}
+  constructor(private readonly memoryGameService: MemoryGameService) {}
 
   @Get()
   @ApiOperation({ summary: '좌표 던지기' })
@@ -21,5 +33,19 @@ export class MemoryGameController {
     }
 
     return randomCoordinates;
+  }
+
+  @Post()
+  @ApiOperation({ summary: '퀴즈 추가' })
+  @ApiBody({ type: CreateMemoryGameDto })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  async addChatting(
+    @Body() data: MemoryGame,
+    @Req() request,
+  ): Promise<MemoryGame> {
+    const user = request.user;
+
+    return this.memoryGameService.addMemoryGameScore(data, user);
   }
 }
