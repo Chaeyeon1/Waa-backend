@@ -29,6 +29,11 @@ export class WordChainController {
   ): Promise<WordChain> {
     const user = request.user; // 현재 로그인된 사용자 정보
 
+    const coordinate = [
+      [1, 2],
+      [2, 3],
+    ];
+
     return this.wordChainService.addChatting(data, user);
   }
 
