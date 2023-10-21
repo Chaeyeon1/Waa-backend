@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MemoryGame, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { MemoryGameRankingDto } from './memoryGameDto';
 
 @Injectable()
 export class MemoryGameService {
@@ -12,7 +13,22 @@ export class MemoryGameService {
       data: {
         score: data.score ?? 0,
         userId: user.id,
+        userName: user.username,
       },
     });
+  }
+
+  // 랭킹
+  async getMemoryGameRanking(): Promise<MemoryGameRankingDto[]> {
+    const ranking = await this.prismaService.memoryGame.findMany({
+      orderBy: {
+        score: 'desc',
+      },
+    });
+
+    return ranking.map((record) => ({
+      username: record.userName,
+      score: record.score,
+    }));
   }
 }

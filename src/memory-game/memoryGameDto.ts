@@ -8,3 +8,8 @@ export class CreateMemoryGameDto {
   })
   score: number;
 }
+
+export class MemoryGameRankingDto {
+  username: string;
+  score: number;
+}

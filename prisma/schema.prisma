@@ -91,6 +91,7 @@ model Stock {
 model MemoryGame {
   id         Int     @default(autoincrement()) @id
   userId     Int
+  userName    String
   score      Int
   createdAt  DateTime @default(now())
   user       User    @relation(fields: [userId], references: [id])
@@ -99,6 +100,7 @@ model MemoryGame {
 model DrawingGame {
   id         Int     @default(autoincrement()) @id
   userId     Int
+  userName   String
   score      Int
   createdAt  DateTime @default(now())
   user       User    @relation(fields: [userId], references: [id])

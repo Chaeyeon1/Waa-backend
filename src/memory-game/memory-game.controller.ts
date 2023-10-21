@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { MemoryGameService } from './memory-game.service';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateMemoryGameDto } from './memoryGameDto';
+import { CreateMemoryGameDto, MemoryGameRankingDto } from './memoryGameDto';
 import { AuthGuard } from '@nestjs/passport';
 import { MemoryGame } from '@prisma/client';
 
@@ -47,5 +47,11 @@ export class MemoryGameController {
     const user = request.user;
 
     return this.memoryGameService.addMemoryGameScore(data, user);
+  }
+
+  @Get('/ranking')
+  @ApiOperation({ summary: '메모리게임 랭킹 조회' })
+  async searchChatting(): Promise<MemoryGameRankingDto[]> {
+    return this.memoryGameService.getMemoryGameRanking();
   }
 }
