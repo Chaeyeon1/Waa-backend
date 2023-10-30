@@ -12,6 +12,13 @@ export class CreateUserDto {
 
   @ApiProperty({ description: '나이', default: 23, required: true })
   age: number;
+
+  @ApiProperty({
+    description: '이메일',
+    default: 'slide10245@naver.com',
+    required: true,
+  })
+  email: string;
 }
 
 export class ModifyPasswordDto {
