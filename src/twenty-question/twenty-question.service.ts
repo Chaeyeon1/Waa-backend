@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { TwentyQuestion } from '@prisma/client';
+import { TwentyQuestion, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -7,7 +7,7 @@ export class TwentyQuestionService {
   constructor(private prismaService: PrismaService) {}
 
   // 추가
-  async addChatting(data: TwentyQuestion, user): Promise<TwentyQuestion> {
+  async addChatting(data: TwentyQuestion, user: User): Promise<TwentyQuestion> {
     if (!data) {
       throw new BadRequestException('no Data');
     }
@@ -23,7 +23,7 @@ export class TwentyQuestionService {
   }
 
   // 조회
-  async getUserTwentyQuestions(user): Promise<TwentyQuestion[]> {
+  async getUserTwentyQuestions(user: User): Promise<TwentyQuestion[]> {
     const userTwentyQuestion = await this.prismaService.twentyQuestion.findMany(
       {
         where: {
@@ -36,7 +36,7 @@ export class TwentyQuestionService {
   }
 
   // 전체 삭제
-  async deleteAllTwentyQuestions(user) {
+  async deleteAllTwentyQuestions(user: User) {
     await this.prismaService.twentyQuestion.deleteMany({
       where: {
         user_id: user.id,

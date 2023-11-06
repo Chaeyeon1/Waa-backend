@@ -24,15 +24,15 @@ export class MemoryGameController {
     @Headers('count') count: number,
   ): Promise<number[][]> {
     const numberOfCoordinates = count;
-    const randomCoordinates = [];
+    const randomCoordinates = new Set<number[]>();
 
-    for (let i = 0; i < numberOfCoordinates; i++) {
-      const x = Math.floor(Math.random() * 2) + 1;
-      const y = Math.floor(Math.random() * 2) + 1;
-      randomCoordinates.push([x, y]);
+    while (randomCoordinates.size < numberOfCoordinates) {
+      const x = Math.floor(Math.random() * 3);
+      const y = Math.floor(Math.random() * 3);
+      randomCoordinates.add([x, y]);
     }
 
-    return randomCoordinates;
+    return Array.from(randomCoordinates);
   }
 
   @Post()
