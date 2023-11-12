@@ -25,9 +25,7 @@ export class QuizController {
   @ApiOperation({ summary: '퀴즈 조회' })
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('access-token')
-  async searchChatting(@Req() request): Promise<Quiz[]> {
-    const user = request.user;
-
-    return this.quizService.getUserQuiz(user);
+  async searchChatting(): Promise<Quiz[]> {
+    return this.quizService.getUserQuiz();
   }
 }

@@ -23,12 +23,8 @@ export class QuizService {
   }
 
   // 조회
-  async getUserQuiz(user: User): Promise<Quiz[]> {
-    const userQuiz = await this.prismaService.quiz.findMany({
-      where: {
-        user_id: user.id,
-      },
-    });
+  async getUserQuiz(): Promise<Quiz[]> {
+    const userQuiz = await this.prismaService.quiz.findMany();
 
     return userQuiz;
   }
