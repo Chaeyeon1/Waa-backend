@@ -24,22 +24,23 @@ export class MemoryGameController {
     @Headers('count') count: number,
   ): Promise<number[][]> {
     const numberOfCoordinates = count;
-    const randomCoordinates = new Set<string>(); // Change the set type to string
+    const randomCoordinates: number[][] = [];
 
-    while (randomCoordinates.size < numberOfCoordinates) {
+    while (randomCoordinates.length < numberOfCoordinates) {
       const x = Math.floor(Math.random() * 3);
       const y = Math.floor(Math.random() * 3);
-      const coordinateString = `${x},${y}`; // Convert coordinates to a string
+      const coordinate = [x, y];
 
-      randomCoordinates.add(coordinateString);
+      if (
+        !randomCoordinates.some(
+          ([existingX, existingY]) => existingX === x && existingY === y,
+        )
+      ) {
+        randomCoordinates.push(coordinate);
+      }
     }
 
-    const result = Array.from(randomCoordinates).map((coordinateString) => {
-      const [x, y] = coordinateString.split(',').map(Number);
-      return [x, y];
-    });
-
-    return result;
+    return randomCoordinates;
   }
 
   @Post()
