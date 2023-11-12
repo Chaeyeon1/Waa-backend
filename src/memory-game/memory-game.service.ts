@@ -20,15 +20,28 @@ export class MemoryGameService {
 
   // 랭킹
   async getMemoryGameRanking(): Promise<MemoryGameRankingDto[]> {
-    const ranking = await this.prismaService.memoryGame.findMany({
+    const uniqueUserScores: Record<string, MemoryGame> = {};
+
+    // Fetch all records and filter only the highest scores for each user
+    const allRecords = await this.prismaService.memoryGame.findMany({
       orderBy: {
         score: 'desc',
       },
     });
 
-    return ranking.map((record) => ({
+    allRecords.forEach((record) => {
+      const existingRecord = uniqueUserScores[record.userName];
+
+      if (!existingRecord || existingRecord.score < record.score) {
+        uniqueUserScores[record.userName] = record;
+      }
+    });
+
+    const ranking = Object.values(uniqueUserScores).map((record) => ({
       username: record.userName,
       score: record.score,
     }));
+
+    return ranking;
   }
 }
