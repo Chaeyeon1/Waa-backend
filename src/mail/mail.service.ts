@@ -3,6 +3,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { CounselingDangerousKeywordProps } from 'src/counseling/counseling.dto';
 
 @Injectable()
 export class MailService {
@@ -11,23 +12,39 @@ export class MailService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async getDangerousKeywordsContent(user): Promise<string[]> {
-    const dangerousContent = [];
+  async getDangerousKeywordsContent(
+    user: User,
+  ): Promise<CounselingDangerousKeywordProps> {
+    const dangerousContent: CounselingDangerousKeywordProps = [];
 
-    const keywordCount = await this.prismaService.keywordCount.findMany({
+    const storedInformations = await this.prismaService.keywordCount.findMany({
       where: {
         userId: user.id,
       },
     });
 
-    if (keywordCount) {
-      // 해당 키워드에 대한 카운트가 있는 경우, 키워드와 카운트 정보를 반환
-      keywordCount.map((keyword) => {
-        dangerousContent.push({
-          keyword: keyword.keyword,
-          count: keyword.count,
-          content: keyword.content,
-        });
+    console.log('user', user);
+
+    if (storedInformations) {
+      storedInformations.forEach((storedInformation) => {
+        // dangerousContent에 해당 키워드가 있는지 확인합니다.
+        const existingEntry = dangerousContent.find(
+          (dangerous) => dangerous.keyword === storedInformation.keyword,
+        );
+
+        if (existingEntry) {
+          // 만약 해당 키워드가 이미 있다면, content 배열을 업데이트합니다.
+          existingEntry.content.push(storedInformation.content);
+          // count를 업데이트하고 storedInformation.count를 추가합니다.
+          existingEntry.count += storedInformation.count;
+        } else {
+          // 만약 일치하는 키워드가 없다면, 새 항목을 만듭니다.
+          dangerousContent.push({
+            keyword: storedInformation.keyword,
+            count: storedInformation.count,
+            content: [storedInformation.content],
+          });
+        }
       });
     }
 
@@ -35,9 +52,7 @@ export class MailService {
   }
 
   async sendEmail(user: User) {
-    const keywordsData = await this.getDangerousKeywordsContent({
-      user,
-    });
+    const keywordsData = await this.getDangerousKeywordsContent(user);
 
     const keywords = keywordsData ?? [];
 
