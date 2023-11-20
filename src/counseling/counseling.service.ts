@@ -86,6 +86,7 @@ export class CounselingService {
   ): Promise<{ keyword: string; count: number }[]> {
     const keywords = await this.prismaService.counseling.findMany({
       where: {
+        sender: 'user',
         user_id: user.id,
       },
       select: { content: true },
