@@ -44,7 +44,7 @@ export class CounselingService {
     const contentLower = data.content.toLowerCase();
 
     for (const keyword of dangerousKeywords) {
-      if (contentLower.includes(keyword)) {
+      if (contentLower.includes(keyword) && data.sender === 'user') {
         await this.saveKeywordCount(user, user.id, keyword, data.content);
       }
     }
@@ -53,7 +53,7 @@ export class CounselingService {
   }
 
   // 조회
-  async getUserCounselings(user): Promise<Counseling[]> {
+  async getUserCounselings(user: User): Promise<Counseling[]> {
     const userCounseling = await this.prismaService.counseling.findMany({
       where: {
         user_id: user.id,
@@ -64,7 +64,7 @@ export class CounselingService {
   }
 
   // 전체 삭제
-  async deleteAllCounselings(user) {
+  async deleteAllCounselings(user: User) {
     await this.prismaService.counseling.deleteMany({
       where: {
         user_id: user.id,
@@ -82,7 +82,7 @@ export class CounselingService {
 
   // 자주 등장한 키워드
   async getMostFrequentKeywords(
-    user,
+    user: User,
   ): Promise<{ keyword: string; count: number }[]> {
     const keywords = await this.prismaService.counseling.findMany({
       where: {

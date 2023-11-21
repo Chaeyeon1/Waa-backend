@@ -41,7 +41,7 @@ export class MailService {
           // 만약 일치하는 키워드가 없다면, 새 항목을 만듭니다.
           dangerousContent.push({
             keyword: storedInformation.keyword,
-            count: storedInformation.count,
+            count: storedInformation.count + 1,
             content: [storedInformation.content],
           });
         }
