@@ -40,6 +40,7 @@ export class CounselingService {
       '마약',
       '스트레스',
       '죽고싶다',
+      '죽고',
     ];
 
     const contentLower = data.content.toLowerCase();
